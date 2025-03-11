@@ -5,8 +5,8 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { authService } from "../services/api";
-import { RegisterData } from "../types";
+import { authService } from "@/services/api";
+import { RegisterData } from "@/types";
 
 interface AuthContextType {
   isAuthenticated: boolean;

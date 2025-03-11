@@ -3,13 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogFormData, Remark, Trip } from "@/types";
 import { logService, tripService } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
@@ -341,7 +335,7 @@ const LogForm: React.FC<LogFormProps> = ({
                         handleRemarkChange(
                           index,
                           "status",
-                          e.target.value as any
+                          e.target.value as string
                         )
                       }
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
