@@ -154,7 +154,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search for a location"
             className="flex-1"
-            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <Button onClick={handleSearch}>Search</Button>
         </div>

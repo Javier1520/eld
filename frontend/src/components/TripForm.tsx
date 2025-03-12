@@ -8,6 +8,7 @@ import { TripFormData } from "@/types";
 import { tripService } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
 import MapSelector from "@/components/MapSelector";
+import RouteMap from "@/components/RouteMap"; // We'll create this component next
 
 interface TripFormProps {
   initialData?: TripFormData;
@@ -37,6 +38,9 @@ const TripForm: React.FC<TripFormProps> = ({
   const [activeMapField, setActiveMapField] = useState<
     keyof TripFormData | null
   >(null);
+
+  // State to control route map visibility
+  const [showRouteMap, setShowRouteMap] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -104,6 +108,26 @@ const TripForm: React.FC<TripFormProps> = ({
   // Close map selector without selecting
   const closeMapSelector = () => {
     setActiveMapField(null);
+  };
+
+  // Check if all locations are filled to enable the route button
+  const allLocationsSet = Boolean(
+    formData.current_location &&
+      formData.pickup_location &&
+      formData.dropoff_location
+  );
+
+  // Toggle route map visibility
+  const toggleRouteMap = () => {
+    if (!allLocationsSet) {
+      toast({
+        title: "Missing Locations",
+        description: "Please set all three locations to view the route",
+        variant: "destructive",
+      });
+      return;
+    }
+    setShowRouteMap(!showRouteMap);
   };
 
   return (
@@ -197,6 +221,20 @@ const TripForm: React.FC<TripFormProps> = ({
                 disabled={isSubmitting}
               />
             </div>
+
+            {/* View Route Button */}
+            <div className="pt-2">
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={toggleRouteMap}
+                disabled={!allLocationsSet}
+              >
+                {showRouteMap ? "Hide Route" : "Show Route"}
+              </Button>
+            </div>
+
             <div className="flex justify-end space-x-4 pt-4">
               <Button
                 type="button"
@@ -225,6 +263,18 @@ const TripForm: React.FC<TripFormProps> = ({
             initialCoordinates={formData[activeMapField]}
             onCoordinateSelected={handleCoordinateSelected}
             onClose={closeMapSelector}
+          />
+        </div>
+      )}
+
+      {/* Route Map Modal */}
+      {showRouteMap && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-40">
+          <RouteMap
+            currentLocation={formData.current_location}
+            pickupLocation={formData.pickup_location}
+            dropoffLocation={formData.dropoff_location}
+            onClose={() => setShowRouteMap(false)}
           />
         </div>
       )}
