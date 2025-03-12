@@ -103,7 +103,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({
     try {
       const response = await fetch(
         `https://api.openrouteservice.org/geocode/search?api_key=${
-          process.env.REACT_APP_OPENROUTE_API_KEY
+          import.meta.env.VITE_OPENROUTE_API_KEY
         }&text=${encodeURIComponent(searchQuery)}`,
         {
           method: "GET",
