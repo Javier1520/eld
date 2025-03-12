@@ -5,18 +5,18 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import { Toaster } from "./components/ui/toaster";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { Toaster } from "@/components/ui/toaster";
 
 // Pages
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import CreateTrip from "./pages/CreateTrip";
-import EditTrip from "./pages/EditTrip";
-import CreateLog from "./pages/CreateLog";
-import EditLog from "./pages/EditLog";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import Dashboard from "@/pages/Dashboard";
+import CreateTrip from "@/pages/CreateTrip";
+import EditTrip from "@/pages/EditTrip";
+import CreateLog from "@/pages/CreateLog";
+import EditLog from "@/pages/EditLog";
 
 // Protected route component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
