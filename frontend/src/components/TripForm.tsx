@@ -8,7 +8,7 @@ import { TripFormData } from "@/types";
 import { tripService } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
 import MapSelector from "@/components/MapSelector";
-import RouteMap from "@/components/RouteMap"; // We'll create this component next
+import RouteMap from "@/components/RouteMap";
 
 interface TripFormProps {
   initialData?: TripFormData;
@@ -258,7 +258,7 @@ const TripForm: React.FC<TripFormProps> = ({
 
       {/* Map Selector Modal */}
       {activeMapField && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40">
+        <div className="fixed inset-0 bg-black/50 z-40">
           <MapSelector
             initialCoordinates={formData[activeMapField]}
             onCoordinateSelected={handleCoordinateSelected}
@@ -269,7 +269,7 @@ const TripForm: React.FC<TripFormProps> = ({
 
       {/* Route Map Modal */}
       {showRouteMap && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40">
+        <div className="fixed inset-0 bg-black/50 z-40">
           <RouteMap
             currentLocation={formData.current_location}
             pickupLocation={formData.pickup_location}
