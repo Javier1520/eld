@@ -6,7 +6,7 @@ import {
   TripFormData,
   LogEntry,
   LogFormData,
-} from "../types";
+} from "@/types";
 
 const API_URL = "http://localhost:8000/api";
 
