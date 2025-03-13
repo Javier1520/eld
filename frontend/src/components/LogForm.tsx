@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogFormData, Remark, Trip } from "@/types";
 import { logService, tripService } from "@/services/api";
 import { toast } from "@/hooks/use-toast";
+import LogGrid from "@/components/LogGrid";
 
 interface LogFormProps {
   initialData?: LogFormData;
@@ -265,6 +266,8 @@ const LogForm: React.FC<LogFormProps> = ({
               />
             </div>
           </div>
+
+          <LogGrid remarks={formData.remarks} />
 
           <div className="space-y-4">
             <div className="flex justify-between items-center">
