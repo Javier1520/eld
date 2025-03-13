@@ -11,6 +11,8 @@ const Dashboard: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showTripsModal, setShowTripsModal] = useState(false);
+  const [showLogsModal, setShowLogsModal] = useState(false);
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -126,6 +128,12 @@ const Dashboard: React.FC = () => {
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">All Trips</h2>
+              <Button variant="outline" onClick={() => setShowTripsModal(true)}>
+                Show All Trips
+              </Button>
+            </div>
+            <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-gray-900">
                 Recent Trips
               </h2>
@@ -184,6 +192,12 @@ const Dashboard: React.FC = () => {
 
           <div>
             <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">All Logs</h2>
+              <Button variant="outline" onClick={() => setShowLogsModal(true)}>
+                Show All Logs
+              </Button>
+            </div>
+            <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-gray-900">
                 Recent Logs
               </h2>
@@ -238,6 +252,45 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </main>
+      {/* Trips Modal */}
+      {showTripsModal && (
+        <div className="fixed inset-0 bg-black/50 z-40 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+            <h2 className="text-xl font-semibold mb-4">All Trips</h2>
+            <ul className="divide-y divide-gray-200 max-h-80 overflow-y-auto">
+              {trips.map((trip) => (
+                <li key={trip.id} className="p-2">
+                  Trip #{trip.id} - {trip.pickup_location} to{" "}
+                  {trip.dropoff_location}
+                </li>
+              ))}
+            </ul>
+            <Button onClick={() => setShowTripsModal(false)} className="mt-4">
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Logs Modal */}
+      {showLogsModal && (
+        <div className="fixed inset-0 bg-black/50 z-40 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
+            <h2 className="text-xl font-semibold mb-4">All Logs</h2>
+            <ul className="divide-y divide-gray-200 max-h-80 overflow-y-auto">
+              {logs.map((log) => (
+                <li key={log.id} className="p-2">
+                  Log #{log.id} - Truck {log.truck_number} - Hours:{" "}
+                  {log.total_hours}
+                </li>
+              ))}
+            </ul>
+            <Button onClick={() => setShowLogsModal(false)} className="mt-4">
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
