@@ -260,8 +260,39 @@ const Dashboard: React.FC = () => {
             <ul className="divide-y divide-gray-200 max-h-80 overflow-y-auto">
               {trips.map((trip) => (
                 <li key={trip.id} className="p-2">
-                  Trip #{trip.id} - {trip.pickup_location} to{" "}
-                  {trip.dropoff_location}
+                  <Link
+                    to={`/trips/${trip.id}`}
+                    className="block hover:bg-gray-50"
+                  >
+                    <div className="px-4 py-4 sm:px-6">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-indigo-600 truncate">
+                          Trip #{trip.id}
+                        </p>
+                        <div className="ml-2 flex-shrink-0 flex">
+                          <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Active
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-2 sm:flex sm:justify-between">
+                        <div className="sm:flex">
+                          <p className="flex items-center text-sm text-gray-500">
+                            From: {trip.pickup_location}
+                          </p>
+                          <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                            To: {trip.dropoff_location}
+                          </p>
+                        </div>
+                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                          <p>
+                            Created:{" "}
+                            {new Date(trip.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -280,8 +311,36 @@ const Dashboard: React.FC = () => {
             <ul className="divide-y divide-gray-200 max-h-80 overflow-y-auto">
               {logs.map((log) => (
                 <li key={log.id} className="p-2">
-                  Log #{log.id} - Truck {log.truck_number} - Hours:{" "}
-                  {log.total_hours}
+                  <Link
+                    to={`/logs/${log.id}`}
+                    className="block hover:bg-gray-50"
+                  >
+                    <div className="px-4 py-4 sm:px-6">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-indigo-600 truncate">
+                          Log #{log.id}
+                        </p>
+                        <div className="ml-2 flex-shrink-0 flex">
+                          <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            {log.date}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-2 sm:flex sm:justify-between">
+                        <div className="sm:flex">
+                          <p className="flex items-center text-sm text-gray-500">
+                            Truck: {log.truck_number}
+                          </p>
+                          <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                            Hours: {log.total_hours}
+                          </p>
+                        </div>
+                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                          <p>Carrier: {log.carrier_name}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>
