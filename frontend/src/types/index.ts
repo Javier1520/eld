@@ -54,6 +54,7 @@ export interface LogEntry {
 
 export interface LogFormData {
   date: string;
+  total_miles?: string;
   truck_number: string;
   carrier_name: string;
   main_office_address: string;

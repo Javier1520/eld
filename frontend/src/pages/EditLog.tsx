@@ -56,6 +56,7 @@ const EditLog: React.FC = () => {
 
   const {
     date,
+    total_miles,
     truck_number,
     carrier_name,
     main_office_address,
@@ -63,11 +64,13 @@ const EditLog: React.FC = () => {
     co_driver_name,
     remarks,
     total_hours,
+    shipping_document,
     trip,
   } = log;
 
   const logFormData: LogFormData = {
     date,
+    total_miles: total_miles || undefined,
     truck_number,
     carrier_name,
     main_office_address,
@@ -75,6 +78,7 @@ const EditLog: React.FC = () => {
     co_driver_name: co_driver_name || undefined,
     remarks,
     total_hours,
+    shipping_document: shipping_document || undefined,
     trip,
   };
 

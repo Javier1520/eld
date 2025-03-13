@@ -26,12 +26,14 @@ const defaultRemark: Remark = {
 
 const defaultFormData: LogFormData = {
   date: new Date().toISOString().split("T")[0],
+  total_miles: "",
   truck_number: "",
   carrier_name: "",
   main_office_address: "",
   driver_signature: "",
   remarks: [defaultRemark],
   total_hours: "0.00",
+  shipping_document: "",
   trip: 0,
 };
 
@@ -72,7 +74,7 @@ const LogForm: React.FC<LogFormProps> = ({
     };
 
     fetchTrips();
-  }, [isEditing, formData.trip]);
+  }, [isEditing, formData]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -262,6 +264,27 @@ const LogForm: React.FC<LogFormProps> = ({
                 value={formData.total_hours}
                 onChange={handleInputChange}
                 required
+                disabled={isSubmitting}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="shipping_document">Shipping Document</Label>
+              <Input
+                id="shipping_document"
+                name="shipping_document"
+                value={formData.shipping_document || ""}
+                onChange={handleInputChange}
+                disabled={isSubmitting}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="total_miles">Total Miles</Label>
+              <Input
+                id="total_miles"
+                name="total_miles"
+                type="text"
+                value={formData.total_miles || ""}
+                onChange={handleInputChange}
                 disabled={isSubmitting}
               />
             </div>
