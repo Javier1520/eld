@@ -3,6 +3,12 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  parseCoordinates,
+  getRoute,
+  formatRouteInfo,
+  RouteInfoSummary,
+} from "@/services/openRouteApi";
 
 interface RouteMapProps {
   currentLocation: string;
@@ -20,26 +26,7 @@ const RouteMap: React.FC<RouteMapProps> = ({
   const mapRef = useRef<L.Map | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [routeInfo, setRouteInfo] = useState<{
-    distance: string;
-    duration: string;
-  } | null>(null);
-
-  // Parse coordinates from string format
-  const parseCoordinates = (coordStr: string): [number, number] => {
-    try {
-      const [lng, lat] = coordStr
-        .split(",")
-        .map((coord) => parseFloat(coord.trim()));
-      if (isNaN(lng) || isNaN(lat)) {
-        throw new Error("Invalid coordinates format");
-      }
-      return [lng, lat];
-    } catch (err) {
-      console.error("Error parsing coordinates:", err);
-      throw new Error("Could not parse coordinates");
-    }
-  };
+  const [routeInfo, setRouteInfo] = useState<RouteInfoSummary | null>(null);
 
   useEffect(() => {
     const initMap = async () => {
@@ -100,27 +87,7 @@ const RouteMap: React.FC<RouteMapProps> = ({
           const coordinates = [current, pickup, dropoff];
 
           try {
-            const response = await fetch(
-              "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    import.meta.env.VITE_OPENROUTE_API_KEY
-                  }`,
-                },
-                body: JSON.stringify({
-                  coordinates: coordinates,
-                }),
-              }
-            );
-
-            if (!response.ok) {
-              throw new Error(`API Error: ${response.status}`);
-            }
-
-            const routeData = await response.json();
+            const routeData = await getRoute(coordinates);
 
             // Add route to map
             const route = L.geoJSON(routeData, {
@@ -134,29 +101,10 @@ const RouteMap: React.FC<RouteMapProps> = ({
             // Fit map bounds to show the entire route
             mapRef.current.fitBounds(route.getBounds(), { padding: [30, 30] });
 
-            // Extract and format route information
-            if (routeData.features && routeData.features.length > 0) {
-              const summary = routeData.features[0].properties.summary;
-              if (summary) {
-                // Convert distance from meters to miles
-                const distanceInMiles = (summary.distance / 1609.34).toFixed(1);
-
-                // Format duration from seconds to hours and minutes
-                const hours = Math.floor(summary.duration / 3600);
-                const minutes = Math.floor((summary.duration % 3600) / 60);
-
-                let durationText = "";
-                if (hours > 0) {
-                  durationText = `${hours} hr ${minutes} min`;
-                } else {
-                  durationText = `${minutes} min`;
-                }
-
-                setRouteInfo({
-                  distance: `${distanceInMiles} miles`,
-                  duration: durationText,
-                });
-              }
+            // Process route information
+            const formattedRouteInfo = formatRouteInfo(routeData);
+            if (formattedRouteInfo) {
+              setRouteInfo(formattedRouteInfo);
             }
           } catch (routeError) {
             console.error("Error fetching route:", routeError);

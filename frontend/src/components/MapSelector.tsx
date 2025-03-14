@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { searchLocation, parseCoordinates } from "@/services/openRouteApi";
 
 interface MapSelectorProps {
   initialCoordinates?: string;
@@ -33,14 +34,10 @@ const MapSelector: React.FC<MapSelectorProps> = ({
     // Parse initial coordinates if provided
     if (initialCoordinates) {
       try {
-        const [lng, lat] = initialCoordinates
-          .split(",")
-          .map((coord) => parseFloat(coord.trim()));
-        if (!isNaN(lng) && !isNaN(lat)) {
-          defaultLng = lng;
-          defaultLat = lat;
-          defaultZoom = 10;
-        }
+        const [lng, lat] = parseCoordinates(initialCoordinates);
+        defaultLng = lng;
+        defaultLat = lat;
+        defaultZoom = 10;
       } catch (error) {
         console.error("Error parsing coordinates:", error);
       }
@@ -101,20 +98,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({
     if (!searchQuery.trim() || !mapRef.current) return;
 
     try {
-      const response = await fetch(
-        `https://api.openrouteservice.org/geocode/search?api_key=${
-          import.meta.env.VITE_OPENROUTE_API_KEY
-        }&text=${encodeURIComponent(searchQuery)}`,
-        {
-          method: "GET",
-          headers: {
-            Accept:
-              "application/json, application/geo+json, application/gpx+xml",
-          },
-        }
-      );
-
-      const data = await response.json();
+      const data = await searchLocation(searchQuery);
 
       if (data.features && data.features.length > 0) {
         const [lng, lat] = data.features[0].geometry.coordinates;
