@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,6 +11,15 @@ import {
   parseCoordinates,
   addOpenStreetMapTileLayer,
 } from "@/services/openRouteApi";
+
+const customIcon = L.icon({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 interface MapSelectorProps {
   initialCoordinates?: string;
@@ -62,9 +73,9 @@ const MapSelector: React.FC<MapSelectorProps> = ({
 
       // Add a marker if we have initial coordinates
       if (initialCoordinates) {
-        markerRef.current = L.marker([defaultLat, defaultLng]).addTo(
-          mapRef.current
-        );
+        markerRef.current = L.marker([defaultLat, defaultLng], {
+          icon: customIcon,
+        }).addTo(mapRef.current);
       }
 
       // Handle click event on the map
@@ -78,7 +89,9 @@ const MapSelector: React.FC<MapSelectorProps> = ({
         if (markerRef.current) {
           markerRef.current.setLatLng([lat, lng]);
         } else {
-          markerRef.current = L.marker([lat, lng]).addTo(mapRef.current!);
+          markerRef.current = L.marker([lat, lng], { icon: customIcon }).addTo(
+            mapRef.current!
+          );
         }
       });
     }
@@ -110,7 +123,9 @@ const MapSelector: React.FC<MapSelectorProps> = ({
         if (markerRef.current) {
           markerRef.current.setLatLng([lat, lng]);
         } else {
-          markerRef.current = L.marker([lat, lng]).addTo(mapRef.current);
+          markerRef.current = L.marker([lat, lng], { icon: customIcon }).addTo(
+            mapRef.current
+          );
         }
 
         // Update selected coordinates
@@ -134,6 +149,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({
       <CardContent className="p-4">
         <div className="flex items-center space-x-2 mb-4">
           <Input
+            name="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search for a location"
