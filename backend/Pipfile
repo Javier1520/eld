@@ -9,6 +9,7 @@ djangorestframework = "*"
 python-dotenv = "*"
 djoser = "*"
 django-cors-headers = "*"
+dj-database-url = "*"
 
 [dev-packages]
 

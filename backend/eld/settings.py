@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-m(zb7n@wb45cc1^8lrky)q9vhd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS', '*')]
 
 
 # Application definition
@@ -93,6 +93,11 @@ DATABASES = {
     }
 }
 
+# import dj_database_url
+# DATABASES = {
+#     'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -146,5 +151,5 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173'
+    os.getenv('CORS_ALLOWED_ORIGINS' ,'http://localhost:5173')
 ]
