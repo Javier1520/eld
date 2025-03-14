@@ -1,12 +1,14 @@
 import { FeatureCollection } from "geojson";
+import L from "leaflet";
 
 // API key should be handled via environment variables
 const API_KEY = import.meta.env.VITE_OPENROUTE_API_KEY;
 
 // Types
-import { Feature, Geometry } from "geojson";
+import { Feature, Geometry, GeoJsonProperties } from "geojson";
 
-export interface RouteResponse extends FeatureCollection {
+export interface RouteResponse
+  extends FeatureCollection<Geometry, GeoJsonProperties> {
   features: Array<
     Feature<
       Geometry,
@@ -38,6 +40,17 @@ export interface RouteInfoSummary {
   distance: string;
   duration: string;
 }
+
+/**
+ * Add OpenStreetMap tile layer to the map
+ */
+export const addOpenStreetMapTileLayer = (map: L.Map): L.TileLayer => {
+  return L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+  }).addTo(map);
+};
 
 /**
  * Search for a location using the OpenRouteService geocoding API

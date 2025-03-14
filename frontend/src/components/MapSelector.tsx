@@ -4,7 +4,11 @@ import "leaflet/dist/leaflet.css";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { searchLocation, parseCoordinates } from "@/services/openRouteApi";
+import {
+  searchLocation,
+  parseCoordinates,
+  addOpenStreetMapTileLayer,
+} from "@/services/openRouteApi";
 
 interface MapSelectorProps {
   initialCoordinates?: string;
@@ -53,12 +57,8 @@ const MapSelector: React.FC<MapSelectorProps> = ({
         defaultZoom
       );
 
-      // Add tile layer using OpenStreetMap
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
-      }).addTo(mapRef.current);
+      // Add tile layer using centralized function
+      addOpenStreetMapTileLayer(mapRef.current);
 
       // Add a marker if we have initial coordinates
       if (initialCoordinates) {
