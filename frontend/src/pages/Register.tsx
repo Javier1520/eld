@@ -47,12 +47,10 @@ const Register: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Using a placeholder email since the backend might still require it
-      const email = `${username}@example.com`;
-      await register({ username, email, password });
+      await register({ username, password });
       toast({
         title: "Registration Successful",
-        description: "Your account has been created. Please log in.",
+        description: "Your account has been created. Logging in.",
       });
       navigate("/login");
     } catch (error) {

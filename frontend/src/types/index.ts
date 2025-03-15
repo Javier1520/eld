@@ -6,7 +6,7 @@ export interface AuthResponse {
 export interface RegisterData {
   username: string;
   password: string;
-  email: string;
+  email?: string;
 }
 
 // Trip types
