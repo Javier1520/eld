@@ -19,7 +19,7 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register } = useAuth();
+  const { register, login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,14 +47,33 @@ const Register: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      // Handle registration first
       await register({ username, password });
       toast({
         title: "Registration Successful",
-        description: "Your account has been created. Logging in.",
+        description: "Account created successfully. Attempting to log in...",
       });
-      navigate("/login");
-    } catch (error) {
-      console.error("Registration error:", error);
+
+      // Handle login separately
+      try {
+        await login(username, password);
+        toast({
+          title: "Login Successful",
+          description: "You have been logged in successfully.",
+        });
+        navigate("/dashboard"); // or wherever you want to redirect after login
+      } catch (loginError) {
+        console.error("Login error:", loginError);
+        toast({
+          title: "Login Failed",
+          description:
+            "Account created but unable to log in. Please try logging in manually.",
+          variant: "destructive",
+        });
+        navigate("/login");
+      }
+    } catch (registrationError) {
+      console.error("Registration error:", registrationError);
       toast({
         title: "Registration Failed",
         description:
